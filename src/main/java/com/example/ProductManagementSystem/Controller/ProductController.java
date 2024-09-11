@@ -3,6 +3,7 @@ import com.example.ProductManagementSystem.Entity.Product;
 import com.example.ProductManagementSystem.Service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +24,11 @@ import java.util.List;
     }
 
     // Get all products
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<Product>> getAllProducts() {
+//        List<Product> products = productService.getAllProducts();
+//        return ResponseEntity.ok(products);
+//    }
 
     // Get a single product by ID
     @GetMapping("/{productid}")
@@ -50,6 +51,17 @@ import java.util.List;
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping
+    public Page<Product> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        return productService.getProducts(page, size, sortBy, direction);
     }
 
 }
